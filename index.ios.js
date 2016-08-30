@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 
 import Book from './ios_views/bookList';
+import AllBooks from './ios_views/allBooks';
+import DonateBookNavigator from './ios_views/donateBooks';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 class aizengshu extends Component {
@@ -38,18 +40,16 @@ class aizengshu extends Component {
       <TabBarIOS
         >
         <Icon.TabBarItemIOS
-          title='找本书看'
-          selected={this.state.selectedTab === '找本书看'}
+          title='领一本书'
+          selected={this.state.selectedTab === '领一本书'}
           iconName="ios-book-outline"
           selectedIconName="ios-book"
           onPress={() => {
-            this.setState({ selectedTab: '找本书看' });
-          }}>
-          <WebView
-            source={{uri: 'https://m.douban.com/book/travel'}}
-            style={{marginTop: 20}}
-          />
+            this.setState({ selectedTab: '领一本书' });
+        }}>          
+          <AllBooks/>
         </Icon.TabBarItemIOS>
+        
         <Icon.TabBarItemIOS
           title='赠书'
           iconName="ios-send-outline"
@@ -58,7 +58,7 @@ class aizengshu extends Component {
           onPress={() => {
             this.setState({ selectedTab: '赠书' });
           }}>
-          <Book title='爱查找'/>
+          <DonateBookNavigator/>
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title='书信'
