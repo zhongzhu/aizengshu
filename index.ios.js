@@ -24,7 +24,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 class aizengshu extends Component {
   constructor(props) {
     super(props);
-    this.state = {selectedTab: '图书'};
+    this.state = {selectedTab: '领一本书'};
   }
 
   _renderContent(text) {
@@ -37,8 +37,7 @@ class aizengshu extends Component {
 
   render() {
     return (
-      <TabBarIOS
-        >
+      <TabBarIOS>
         <Icon.TabBarItemIOS
           title='领一本书'
           selected={this.state.selectedTab === '领一本书'}
@@ -46,7 +45,8 @@ class aizengshu extends Component {
           selectedIconName="ios-book"
           onPress={() => {
             this.setState({ selectedTab: '领一本书' });
-        }}>          
+          }}
+        >          
           <AllBooks/>
         </Icon.TabBarItemIOS>
         

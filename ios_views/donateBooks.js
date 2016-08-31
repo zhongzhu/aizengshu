@@ -54,6 +54,7 @@ export default class DonateBookNavigator extends Component {
           passProps: {},
           rightButtonTitle: '扫码加书',
           onRightButtonPress: () => {
+            console.log('haha');
             alert('什么都没有发生');
           }
         }}
