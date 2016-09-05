@@ -1,7 +1,18 @@
 'use strict';
 
+import BookDetails from './bookDetails';
+
 import React, { Component, PropTypes } from 'react';
-import { ScrollView, Text, View, Image, ListView, StyleSheet, TouchableHighlight, NavigatorIOS} from 'react-native';
+import { 
+  ScrollView, 
+  Text, 
+  View, 
+  Image, 
+  ListView, 
+  StyleSheet, 
+  TouchableHighlight, 
+  ActivityIndicator, 
+  NavigatorIOS } from 'react-native';
 
 var styles = StyleSheet.create({
   thumb: {
@@ -73,7 +84,7 @@ class BookList extends Component {
   renderRow(rowData, sectionID, rowID) {
     console.log(rowData);
     return (
-      <TouchableHighlight underlayColor='#dddddd'>
+      <TouchableHighlight onPress={this.onBookDetails.bind(this, rowData.id)}>
         <View>
           <View style={styles.rowContainer}>
             <Image style={styles.thumb} source={{ uri: rowData.image }} />
@@ -87,12 +98,26 @@ class BookList extends Component {
     );
   }
 
+  onBookDetails(id) {
+    this.props.navigator.push({
+      component: BookDetails,
+      title: '详情',
+      passProps:{
+        id: id
+      }
+    });
+  }
+
   render() {
     return (
       <View style={{flex:1}}>
         {
           this.state.isLoading?
-          <Text>loading...</Text>
+          <ActivityIndicator
+            animating={true}
+            style={[styles.centering, {height: 80}]}
+            size="large"
+          />
           :
           <ListView style={{marginTop: 60}}
             dataSource={this.state.dataSource}
