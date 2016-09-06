@@ -14,34 +14,6 @@ import {
   ActivityIndicator, 
   NavigatorIOS } from 'react-native';
 
-var styles = StyleSheet.create({
-  thumb: {
-    width: 80,
-    height: 80,
-    marginRight: 10
-  },
-  textContainer: {
-    flex: 1
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#dddddd'
-  },
-  price: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#48BBEC'
-  },
-  title: {
-    fontSize: 20,
-    color: '#656565'
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    padding: 10
-  }
-});
-
 class BookList extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +25,7 @@ class BookList extends Component {
   getData() {
     this.setState({ isLoading: true });
 
-    let query = 'https://api.douban.com/v2/book/search?count=3&q=流行&fields=title,image,author,isbn13,id';
+    let query = 'https://api.douban.com/v2/book/search?count=5&q=绘本&fields=title,image,author,isbn13,id';
     console.log(query);
    
     fetch(query)
@@ -88,8 +60,8 @@ class BookList extends Component {
         <View>
           <View style={styles.rowContainer}>
             <Image style={styles.thumb} source={{ uri: rowData.image }} />
-            <View  style={styles.textContainer}>              
-              <Text style={styles.title}>{rowData.title}</Text>
+            <View  style={styles.textContainer}>     
+              <Text style={styles.title} numberOfLines={1}>{rowData.title}</Text>
             </View>
           </View>
           <View style={styles.separator}/>
@@ -119,7 +91,7 @@ class BookList extends Component {
             size="large"
           />
           :
-          <ListView style={{marginTop: 60}}
+          <ListView style={{marginTop: 65}}
             dataSource={this.state.dataSource}
             renderRow={this.renderRow.bind(this)}
           />
@@ -139,3 +111,31 @@ export default class AllBooks extends Component {
     );
   }
 }
+
+var styles = StyleSheet.create({
+  thumb: {
+    width: 80,
+    height: 80,
+    marginRight: 10
+  },
+  textContainer: {
+    flex: 1
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#dddddd'
+  },
+  price: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#48BBEC'
+  },
+  title: {
+    fontSize: 20,
+    color: '#656565'
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    padding: 10
+  }
+});
