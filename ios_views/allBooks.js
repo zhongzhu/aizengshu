@@ -11,6 +11,7 @@ import {
   ListView, 
   StyleSheet, 
   TouchableHighlight, 
+  TextInput,
   ActivityIndicator, 
   NavigatorIOS } from 'react-native';
 
@@ -18,14 +19,19 @@ class BookList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      searchString: '绘本'
     };    
   }
+
+  onSearchPressed() {
+    this.getData();
+  }  
 
   getData() {
     this.setState({ isLoading: true });
 
-    let query = 'https://api.douban.com/v2/book/search?count=5&q=绘本&fields=title,image,author,isbn13,id';
+    let query = 'https://api.douban.com/v2/book/search?count=5&q=' + this.state.searchString + '&fields=title,image,author,isbn13,id';
     console.log(query);
    
     fetch(query)
@@ -40,6 +46,7 @@ class BookList extends Component {
   }
 
   componentDidMount(){
+    console.log(this.state);
     this.getData();
   }
 
@@ -80,21 +87,43 @@ class BookList extends Component {
     });
   }
 
+  onSearchTextChanged(event) {
+    this.setState({ searchString: event.nativeEvent.text });
+    console.log(this.state.searchString);
+  }
+
   render() {
     return (
       <View style={{flex:1}}>
         {
           this.state.isLoading?
-          <ActivityIndicator
+          (<ActivityIndicator
             animating={true}
             style={[styles.centering, {height: 80}]}
             size="large"
-          />
+          />)
           :
-          <ListView style={{marginTop: 65}}
+          (
+          <View style={{marginTop: 70}}>
+          <View style={styles.flowRight}>
+            <TextInput
+            style={styles.searchInput}
+            value={this.state.searchString}
+            onChange={this.onSearchTextChanged.bind(this)}
+            placeholder='用书名搜索'/>
+            <TouchableHighlight style={styles.button}
+              underlayColor='#99d9f4'
+              onPress={this.onSearchPressed.bind(this)}
+              >
+              <Text style={styles.buttonText}>Go</Text>
+            </TouchableHighlight>
+          </View>
+          <ListView
             dataSource={this.state.dataSource}
             renderRow={this.renderRow.bind(this)}
           />
+          </View>
+          )
         }
       </View>      
     )
@@ -137,5 +166,38 @@ var styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     padding: 10
-  }
+  },
+  flowRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'stretch'
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
+  },
+  button: {
+    height: 36,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#48BBEC',
+    borderColor: '#48BBEC',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
+  },
+  searchInput: {
+    height: 36,
+    padding: 4,
+    marginRight: 5,
+    flex: 4,
+    fontSize: 18,
+    borderWidth: 1,
+    borderColor: '#48BBEC',
+    borderRadius: 8,
+    color: '#48BBEC'
+  }    
 });
