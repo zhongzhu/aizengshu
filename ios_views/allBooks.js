@@ -97,31 +97,27 @@ class BookList extends Component {
       <View style={{flex:1}}>
         {
           this.state.isLoading?
-          (<ActivityIndicator
-            animating={true}
-            style={[styles.centering, {height: 80}]}
-            size="large"
-          />)
+          (<ActivityIndicator animating={true} style={[styles.centering, {height: 80}]} size="large" />)
           :
           (
           <View style={{marginTop: 70}}>
-          <View style={styles.flowRight}>
-            <TextInput
-            style={styles.searchInput}
-            value={this.state.searchString}
-            onChange={this.onSearchTextChanged.bind(this)}
-            placeholder='用书名搜索'/>
-            <TouchableHighlight style={styles.button}
-              underlayColor='#99d9f4'
-              onPress={this.onSearchPressed.bind(this)}
+            <View style={styles.flowRight}>
+              <TextInput
+              style={styles.searchInput}
+              value={this.state.searchString}
+              onChange={this.onSearchTextChanged.bind(this)}
+              placeholder='用书名搜索'/>
+              <TouchableHighlight style={styles.button}
+                underlayColor='#99d9f4'
+                onPress={this.onSearchPressed.bind(this)}
               >
-              <Text style={styles.buttonText}>Go</Text>
-            </TouchableHighlight>
-          </View>
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderRow.bind(this)}
-          />
+                <Text style={styles.buttonText}>Go</Text>
+              </TouchableHighlight>
+            </View>
+            <ListView
+              dataSource={this.state.dataSource}
+              renderRow={this.renderRow.bind(this)}
+            />
           </View>
           )
         }
@@ -170,7 +166,9 @@ var styles = StyleSheet.create({
   flowRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
+    marginLeft: 10,
+    marginRight: 10
   },
   buttonText: {
     fontSize: 18,

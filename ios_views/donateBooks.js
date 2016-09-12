@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { ScrollView, Text, StyleSheet, TouchableHighlight, NavigatorIOS} from 'react-native';
+import ScanBarCode from './scanBarCode'
 
 class FirstPage extends Component {
   render() {
@@ -44,19 +45,25 @@ const styles = StyleSheet.create({
 });
 
 export default class DonateBookNavigator extends Component {
+  scanBarcode() {
+    console.log('*******');
+    this.refs.navi.push({
+      component: ScanBarCode,
+      title: '扫描图书条形码'
+      });            
+  }
+
   render() {
     return (
       <NavigatorIOS
         style={{flex:1}}
+        ref= "navi"
         initialRoute={{
           title: '我捐赠的书', 
           component: FirstPage, 
           passProps: {},
           rightButtonTitle: '扫码加书',
-          onRightButtonPress: () => {
-            console.log('haha');
-            alert('什么都没有发生');
-          }
+          onRightButtonPress: () => this.scanBarcode()
         }}
       />
     );
