@@ -4,6 +4,9 @@ import React, { Component, PropTypes } from 'react';
 import { ScrollView, Text, StyleSheet, TouchableHighlight, NavigatorIOS} from 'react-native';
 import ScanBarCode from './scanBarCode'
 
+// var QRCodeScreen = require('./QRCodeScreen');
+
+
 class FirstPage extends Component {
   render() {
     return (
@@ -31,7 +34,7 @@ class SecondPage extends Component {
       <ScrollView>
       <Text>this is the Second page</Text>
       </ScrollView>
-      )
+    )
   }
 }
 
