@@ -3,16 +3,20 @@
 import React, { Component, PropTypes } from 'react';
 import { 
   ScrollView, 
-  Text, 
+  Text,
+  View,
   StyleSheet, 
   TouchableHighlight, 
   TouchableOpacity, 
   NavigatorIOS,
-  AlertIOS
+  AlertIOS,
+  Image,
+  ActivityIndicator
 } from 'react-native';
 
 // import ScanBarCode from './scanBarCode'
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import Utils from './utils';
 
 
 class FirstPage extends Component {
@@ -36,50 +40,95 @@ class FirstPage extends Component {
   }
 }
 
-class SecondPage extends Component {
+class AddDonateBook extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: null,
+      isLoading: true
+    };      
+  }
+
+  componentDidMount() {
+    let me = this;
+    console.log(me.props.bookISBN);
+    Utils.getBookByISBN(me.props.bookISBN, me.handleResponse.bind(me), me.handleErr.bind(me));
+  }
+
+  handleResponse(json) {
+    // console.log(json);
+    this.setState({
+      data: json,
+      isLoading: false
+    });
+  }
+
+  handleErr(err) {
+    console.log(err)
+   this.setState({
+    data: null,
+    isLoading: true,
+    message: 'Something bad happened ' + err
+    });
+  }
+
   render() {
     return (
-      <ScrollView>
-      <Text>this is the Second page</Text>
-      </ScrollView>
+      <View style={{flex:1}}>
+        {
+          this.state.isLoading?
+          <ActivityIndicator
+            animating={true}
+            style={{height: 80}}
+            size="large"
+          />
+          :
+          <ScrollView style={{marginTop: 65}}>
+            <View>
+              <View style={styles.rowContainer}>
+                <Image style={styles.thumb} source={{ uri: this.state.data.images.large }} />
+                <View  style={styles.textContainer}>              
+                  <Text style={styles.title} numberOfLines={1}>{this.state.data.title}</Text>
+                  <Text style={{marginTop: 10}} numberOfLines={1}>{this.state.data.author}</Text>
+                  <Text>{this.state.data.publisher}</Text>
+                  <Text>{this.state.data.pubdate}</Text>
+                  <Text>{this.state.data.price}</Text>
+                </View>
+              </View>
+              <View style={styles.separator}/>
+              <Text style={{margin: 10}}>{this.state.data.summary}</Text>
+
+            </View>
+
+          </ScrollView>
+        }
+      </View>      
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  }
-});
-
 export default class DonateBookNavigator extends Component {
-  // scanBarcode() {
-  //   console.log('*******');
-  //   this.refs.navi.push({
-  //     component: ScanBarCode,
-  //     title: '扫描图书条形码'
-  //     });            
-  // }
-
   onBarCodeRead(e) {
-    AlertIOS.alert(
-        "Barcode Found!",
-        "Type: " + e.type + "\nData: " + e.data
-    );
+    // console.log("Type: " + e.type + " Data: " + e.data);
+    this.refs.navi.replace({
+      component: AddDonateBook,
+      title: '图书信息',
+      passProps: {
+        bookISBN: e.data
+      }
+    });
   }
 
   scanBarcode() {
-    console.log('*******');
     this.refs.navi.push({
       component: QRCodeScanner,
-      title: '扫描图书条形码',
+      title: '扫码加书',
       passProps: {
+        fadeIn: false,
         onRead: this.onBarCodeRead.bind(this),
-        topContent: <Text style={styles.centerText}>Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.</Text>,
-        bottomContent: <TouchableOpacity style={styles.buttonTouchable}><Text style={styles.buttonText}>OK. Got it!</Text></TouchableOpacity>
+        topContent: <Text>扫描书背后的条形码，把书加入你的赠书列表</Text>,
+        bottomContent: <TouchableOpacity><Text></Text></TouchableOpacity>
       }
       });            
   }
@@ -100,3 +149,31 @@ export default class DonateBookNavigator extends Component {
     );
   }
 }
+
+var styles = StyleSheet.create({
+  thumb: {
+    width: 120,
+    height: 150,
+    marginRight: 10
+  },
+  textContainer: {
+    flex: 1
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#dddddd'
+  },
+  price: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#48BBEC'
+  },
+  title: {
+    fontSize: 20,
+    color: '#656565'
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    padding: 10
+  }
+});
