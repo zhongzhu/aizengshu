@@ -1,10 +1,18 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { ScrollView, Text, StyleSheet, TouchableHighlight, NavigatorIOS} from 'react-native';
-import ScanBarCode from './scanBarCode'
+import { 
+  ScrollView, 
+  Text, 
+  StyleSheet, 
+  TouchableHighlight, 
+  TouchableOpacity, 
+  NavigatorIOS,
+  AlertIOS
+} from 'react-native';
 
-// var QRCodeScreen = require('./QRCodeScreen');
+// import ScanBarCode from './scanBarCode'
+import QRCodeScanner from 'react-native-qrcode-scanner';
 
 
 class FirstPage extends Component {
@@ -48,11 +56,31 @@ const styles = StyleSheet.create({
 });
 
 export default class DonateBookNavigator extends Component {
+  // scanBarcode() {
+  //   console.log('*******');
+  //   this.refs.navi.push({
+  //     component: ScanBarCode,
+  //     title: '扫描图书条形码'
+  //     });            
+  // }
+
+  onBarCodeRead(e) {
+    AlertIOS.alert(
+        "Barcode Found!",
+        "Type: " + e.type + "\nData: " + e.data
+    );
+  }
+
   scanBarcode() {
     console.log('*******');
     this.refs.navi.push({
-      component: ScanBarCode,
-      title: '扫描图书条形码'
+      component: QRCodeScanner,
+      title: '扫描图书条形码',
+      passProps: {
+        onRead: this.onBarCodeRead.bind(this),
+        topContent: <Text style={styles.centerText}>Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.</Text>,
+        bottomContent: <TouchableOpacity style={styles.buttonTouchable}><Text style={styles.buttonText}>OK. Got it!</Text></TouchableOpacity>
+      }
       });            
   }
 

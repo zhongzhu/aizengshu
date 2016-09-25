@@ -9,6 +9,7 @@ import {
   View,
   AlertIOS
 } from 'react-native';
+
 import Camera from 'react-native-camera';
 
 export default class ScanBarCode extends Component {
