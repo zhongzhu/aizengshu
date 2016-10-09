@@ -11,106 +11,87 @@ import {
   NavigatorIOS,
   AlertIOS,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  ListView
 } from 'react-native';
 
-// import ScanBarCode from './scanBarCode'
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import Utils from './utils';
+import AddDonateBook from './addDonateBook';
+import Utils from './utils'; 
 
 
-class FirstPage extends Component {
-  render() {
-    return (
-      <ScrollView style={{flex:1}}>
-        <Text onPress={this.goTo.bind(this)}>haha</Text>
-        <Text onPress={this.goTo.bind(this)}>hello world</Text>
-        <Text onPress={this.goTo.bind(this)}>hey Jue</Text>
-      </ScrollView>
-    )
-  }
-
-  goTo() {
-    this.props.navigator.push({
-      component: SecondPage,
-      title: '详情',
-      rightButtonTitle: '购物车',
-      onRightButtonPress: () => { alert('进入我的购物车'); }
-    });
-  }
-}
-
-class AddDonateBook extends Component {
+class DonateBookList extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      data: null,
-      isLoading: true
-    };      
+      isLoading: true,
+    };    
   }
 
-  componentDidMount() {
-    let me = this;
-    console.log(me.props.bookISBN);
-    Utils.getBookByISBN(me.props.bookISBN, me.handleResponse.bind(me), me.handleErr.bind(me));
-  }
+  componentDidMount(){
+    this.setState({ isLoading: true });
 
-  handleResponse(json) {
-    // console.log(json);
+    Utils.getMyDonateBooks(      
+      this.handleResponse.bind(this), 
+      (err) => { 
+        console.error(err.message);
+        this.setState({
+          isLoading: true,
+        });
+      }
+    );    
+  }  
+
+  handleResponse(response) {
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id});
+
     this.setState({
-      data: json,
-      isLoading: false
+        dataSource: ds.cloneWithRows(response),
+        isLoading: false
     });
-  }
+  }  
 
-  handleErr(err) {
-    console.log(err)
-   this.setState({
-    data: null,
-    isLoading: true,
-    message: 'Something bad happened ' + err
-    });
-  }
+  renderRow(rowData, sectionID, rowID) {
+    console.log(rowData);
+    return (
+      <TouchableHighlight>
+        <View>
+          <View style={styles.rowContainer}>
+            <Image style={styles.thumb} source={{ uri: rowData.image }} />
+            <View  style={styles.textContainer}>     
+              <Text style={styles.title} numberOfLines={1}>{rowData.title}</Text>
+            </View>
+          </View>
+          <View style={styles.separator}/>
+        </View>
+      </TouchableHighlight>
+    );
+  }  
 
   render() {
     return (
       <View style={{flex:1}}>
         {
           this.state.isLoading?
-          <ActivityIndicator
-            animating={true}
-            style={{height: 80}}
-            size="large"
-          />
+          (<ActivityIndicator animating={true} style={[styles.centering, {height: 80}]} size="large" />)
           :
-          <ScrollView style={{marginTop: 65}}>
-            <View>
-              <View style={styles.rowContainer}>
-                <Image style={styles.thumb} source={{ uri: this.state.data.images.large }} />
-                <View  style={styles.textContainer}>              
-                  <Text style={styles.title} numberOfLines={1}>{this.state.data.title}</Text>
-                  <Text style={{marginTop: 10}} numberOfLines={1}>{this.state.data.author}</Text>
-                  <Text>{this.state.data.publisher}</Text>
-                  <Text>{this.state.data.pubdate}</Text>
-                  <Text>{this.state.data.price}</Text>
-                </View>
-              </View>
-              <View style={styles.separator}/>
-              <Text style={{margin: 10}}>{this.state.data.summary}</Text>
-
-            </View>
-
-          </ScrollView>
+          (
+          <View style={{marginTop: 70}}>
+            <ListView
+              dataSource={this.state.dataSource}
+              renderRow={this.renderRow.bind(this)}
+            />
+          </View>
+          )
         }
-      </View>      
+      </View>  
     )
   }
 }
 
+
 export default class DonateBookNavigator extends Component {
   onBarCodeRead(e) {
-    // console.log("Type: " + e.type + " Data: " + e.data);
     this.refs.navi.replace({
       component: AddDonateBook,
       title: '图书信息',
@@ -140,7 +121,7 @@ export default class DonateBookNavigator extends Component {
         ref= "navi"
         initialRoute={{
           title: '我捐赠的书', 
-          component: FirstPage, 
+          component: DonateBookList, 
           passProps: {},
           rightButtonTitle: '扫码加书',
           onRightButtonPress: () => this.scanBarcode()

@@ -15,6 +15,8 @@ import {
   ActivityIndicator, 
   NavigatorIOS } from 'react-native';
 
+import Utils from './utils';  
+
 class BookList extends Component {
   constructor(props) {
     super(props);
@@ -31,27 +33,23 @@ class BookList extends Component {
   getData() {
     this.setState({ isLoading: true });
 
-    let query = 'https://api.douban.com/v2/book/search?count=5&q=' + this.state.searchString + '&fields=title,image,author,isbn13,id';
-    console.log(query);
-   
-    fetch(query)
-    .then((response) => response.json())
-    .then((json) => this.handleResponse(json.books))
-    .catch((error) => { 
-       this.setState({
-        isLoading: true,
-        message: 'Something bad happened ' + error
+    Utils.searchBooks(      
+      this.state.searchString, 
+      this.handleResponse.bind(this), 
+      (error) => { 
+        this.setState({
+          isLoading: true,
+          message: 'Something bad happened ' + error
         });
-     });
+     }
+    );   
   }
 
   componentDidMount(){
-    console.log(this.state);
     this.getData();
   }
 
   handleResponse(response) {
-    console.log(response);
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id});
 
     this.setState({
@@ -61,7 +59,6 @@ class BookList extends Component {
   }
 
   renderRow(rowData, sectionID, rowID) {
-    console.log(rowData);
     return (
       <TouchableHighlight onPress={this.onBookDetails.bind(this, rowData.id)}>
         <View>

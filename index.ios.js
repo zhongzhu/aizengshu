@@ -20,6 +20,7 @@ import Book from './ios_views/bookList';
 import AllBooks from './ios_views/allBooks';
 import DonateBookNavigator from './ios_views/donateBooks';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Utils from './ios_views/utils'; 
 
 class aizengshu extends Component {
   constructor(props) {
@@ -34,6 +35,10 @@ class aizengshu extends Component {
       </View>
     );
   }
+
+  componentDidMount() {
+    Utils.initMyDonateBooksForTesting();
+  }  
 
   render() {
     return (
