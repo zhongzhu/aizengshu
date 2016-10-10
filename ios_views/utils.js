@@ -52,7 +52,7 @@ module.exports = {
   },
 
   initMyDonateBooksForTesting: function() {
-    let myDonateBooks = {"total":459,"books":[{"image":"https://img1.doubanio.com\/mpic\/s4356378.jpg","isbn13":"9789866244087","title":"三京畫本"},{"image":"https://img3.doubanio.com\/mpic\/s3909231.jpg","isbn13":"9784336050557","title":"妖怪画本・狂歌百物語"},{"image":"https://img1.doubanio.com\/mpic\/s27311818.jpg","isbn13":"9787115341273","title":"水色滋味：让你恋上水彩的美食画本"},{"image":"https://img1.doubanio.com\/mpic\/s27394328.jpg","isbn13":"9784887414198","title":"(企画本)もっと!!困った時には星に聞け!"},{"image":"https://img3.doubanio.com\/mpic\/s1105031.jpg","isbn13":"9787530516461","title":"枕中记 中国古典名著画本"}]};
+    let myDonateBooks = {"count":5,"start":0,"total":14836,"books":[{"image":"https://img1.doubanio.com\/mpic\/s8472038.jpg","title":"绘画","id":"6802150","isbn13":"9787121142512","author":["彼得·库克"]},{"image":"https://img3.doubanio.com\/mpic\/s3720211.jpg","title":"一词一画","id":"1789397","isbn13":"9787541700750","author":["杨恩成注泽"]},{"image":"https://img1.doubanio.com\/mpic\/s6125528.jpg","title":"说唐连环画收藏本（套装全6册）","id":"3374912","isbn13":"9787535629555","author":["文昊 改编"]},{"image":"https://img1.doubanio.com\/mpic\/s1728449.jpg","title":"动物知识翻翻书--在海滩上（注音版）","id":"1102928","isbn13":"9787754142064","author":[]},{"image":"https://img3.doubanio.com\/mpic\/s27217975.jpg","title":"全译绘画圣经故事","id":"25826844","isbn13":"9787303019106","author":[]}]};
 
     AsyncStorage.setItem('myDonateBooks', JSON.stringify(myDonateBooks));
   }

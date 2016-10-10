@@ -18,7 +18,7 @@ import {
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import AddDonateBook from './addDonateBook';
 import Utils from './utils'; 
-
+import BookDetails from './bookDetails';
 
 class DonateBookList extends Component {
   constructor(props) {
@@ -49,12 +49,22 @@ class DonateBookList extends Component {
         dataSource: ds.cloneWithRows(response),
         isLoading: false
     });
+  }
+
+  onBookDetails(id) {
+    this.props.navigator.push({
+      component: BookDetails,
+      title: '详情',
+      passProps:{
+        id: id
+      }
+    });
   }  
 
   renderRow(rowData, sectionID, rowID) {
     console.log(rowData);
     return (
-      <TouchableHighlight>
+      <TouchableHighlight onPress={this.onBookDetails.bind(this, rowData.id)}>
         <View>
           <View style={styles.rowContainer}>
             <Image style={styles.thumb} source={{ uri: rowData.image }} />
