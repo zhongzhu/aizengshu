@@ -29,6 +29,10 @@ class DonateBookList extends Component {
   }
 
   componentDidMount(){
+    this.getData();   
+  }
+
+  getData() {
     this.setState({ isLoading: true });
 
     Utils.getMyDonateBooks(      
@@ -39,8 +43,8 @@ class DonateBookList extends Component {
           isLoading: true,
         });
       }
-    );    
-  }  
+    );
+  }
 
   handleResponse(response) {
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id});
@@ -143,8 +147,8 @@ export default class DonateBookNavigator extends Component {
 
 var styles = StyleSheet.create({
   thumb: {
-    width: 120,
-    height: 150,
+    width: 80,
+    height: 80,
     marginRight: 10
   },
   textContainer: {

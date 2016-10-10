@@ -15,7 +15,7 @@ import {
 module.exports = {
   searchBooks: function(searchString, successCallback, failCallback) {
     let query = 'https://api.douban.com/v2/book/search?count=5&q=' + searchString + '&fields=title,image,author,isbn13,id';
-
+    console.log(query);
     fetch(query)
     .then((response) => response.json())
     .then((json) => successCallback(json.books))
@@ -47,6 +47,22 @@ module.exports = {
     AsyncStorage.getItem('myDonateBooks')
     .then((response) => JSON.parse(response))
     .then((json) => successCallback(json.books))
+    .catch((err) => failCallback(err))
+    .done();
+  },
+
+  donateOneBook: function(oneBook, successCallback, failCallback) {
+    AsyncStorage.getItem('myDonateBooks')
+    .then((response) => {
+      let json = JSON.parse(response);
+      json.books.push(oneBook);
+      return JSON.stringify(json);
+    })
+    .then((jsonString) => 
+      AsyncStorage.setItem('myDonateBooks', jsonString)
+      .then(() => successCallback())
+      .catch((err) => failCallback(err))
+    )
     .catch((err) => failCallback(err))
     .done();
   },

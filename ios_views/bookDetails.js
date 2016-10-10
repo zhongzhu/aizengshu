@@ -13,6 +13,8 @@ import {
   NavigatorIOS
 } from 'react-native';
 
+import Utils from './utils'; 
+
 export default class BookDetails extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +54,27 @@ export default class BookDetails extends Component {
     var me = this;
     console.log(id);
     me.getData(id);
-  }  
+  }
+
+  donateThisBook(data) {
+    console.log('to donate this book');
+    console.log(data);
+    let aBook = {
+      image: data.image,
+      title: data.title,
+      id: data.id,
+      isbn13: data.isbn13,
+      author: data.author
+    };
+
+    Utils.donateOneBook(
+      aBook,
+      () => {
+        console.log('done');
+      },
+      (err) => console.error(err.message)
+    );
+  }
 
   render() {
     return (
@@ -79,7 +101,12 @@ export default class BookDetails extends Component {
               </View>
               <View style={styles.separator}/>
               <Text style={{margin: 10}}>{this.state.data.summary}</Text>
-
+              <TouchableHighlight style={styles.button}
+                underlayColor='#99d9f4'
+                onPress={this.donateThisBook.bind(this, this.state.data)}
+              >
+                <Text style={styles.buttonText}>Donate this book</Text>
+              </TouchableHighlight>
             </View>
 
           </ScrollView>
@@ -95,6 +122,18 @@ var styles = StyleSheet.create({
     height: 150,
     marginRight: 10
   },
+  button: {
+    height: 36,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#48BBEC',
+    borderColor: '#48BBEC',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    // alignSelf: 'stretch',
+    justifyContent: 'center'
+  },  
   textContainer: {
     flex: 1
   },
@@ -114,5 +153,10 @@ var styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     padding: 10
-  }
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
+  },  
 });

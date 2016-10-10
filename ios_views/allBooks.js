@@ -1,7 +1,5 @@
 'use strict';
 
-import BookDetails from './bookDetails';
-
 import React, { Component, PropTypes } from 'react';
 import { 
   ScrollView, 
@@ -13,9 +11,11 @@ import {
   TouchableHighlight, 
   TextInput,
   ActivityIndicator, 
-  NavigatorIOS } from 'react-native';
+  NavigatorIOS 
+} from 'react-native';
 
 import Utils from './utils';  
+import BookDetails from './bookDetails';
 
 class BookList extends Component {
   constructor(props) {

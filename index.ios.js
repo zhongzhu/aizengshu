@@ -16,7 +16,6 @@ import {
   WebView
 } from 'react-native';
 
-import Book from './ios_views/bookList';
 import AllBooks from './ios_views/allBooks';
 import DonateBookNavigator from './ios_views/donateBooks';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -73,7 +72,7 @@ class aizengshu extends Component {
           onPress={() => {
             this.setState({ selectedTab: '书信' });
           }}>
-          <Book title='爱查找'/>
+          {this._renderContent('书信')}
         </Icon.TabBarItemIOS>        
         <Icon.TabBarItemIOS
           title='我'
@@ -83,7 +82,7 @@ class aizengshu extends Component {
           onPress={() => {
             this.setState({ selectedTab: '我' });
           }}>
-          <Book title='爱我'/>
+          {this._renderContent('我')}
         </Icon.TabBarItemIOS>                
       </TabBarIOS>
     )
