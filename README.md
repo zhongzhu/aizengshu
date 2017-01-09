@@ -14,3 +14,12 @@
 
 2016/8/18 @钟柱
 
+## How to build this project on Mac
+* react-native init aizengshu 
+* git clone git@github.com:zhongzhu/aizengshu.git aizengshu
+* cd aizengshu
+* npm install react-native-camera@next --save
+* npm install react-native-qrcode-scanner --save
+* npm install react-native-vector-icons --save
+* react-native link
+* react-native run-ios
